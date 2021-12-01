@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Customer Update</title>
+<link href="css/cab_register_style.css" rel="stylesheet">
+</head>
+<body class="align" onload="load_data()">
+<div class="site__container">
+<div class="grid__container">
+<form action="python/customer_update.py" class="form form--login" id="fm_customer_update" method="post" name="fm_customer_update">
+<div class="form__field"><label for="login__username"><span class="hidden">Registration No</span></label><input class="form__input" id="name" name="name" placeholder="Name" required="" type="text"></div>
+<div class="form__field"><label for="login__username"><span class="hidden">Type</span></label><input class="form__input" id="gender" name="gender" placeholder="Gender" required="" type="text"></div>
+<div class="form__field"><label for="login__username"><span class="hidden">Cab Name</span></label><input class="form__input" id="dob" name="dob" placeholder="Date Of Birth" required="" type="text"></div>
+<div class="form__field"><label for="login__username"><span class="hidden">Mileage</span></label><input class="form__input" id="mobile" name="mobile" placeholder="Mobile" required="" type="text"></div>
+<div class="form__field"><label for="login__username"><span class="hidden">Mileage</span></label><input class="form__input" id="email" name="email" placeholder="Email" required="" type="text"></div>
+<div class="form__field"><label for="login__username"><span class="hidden">Mileage</span></label><input class="form__input" id="address" name="address" placeholder="Address" required="" type="text"></div>
+<div class="form__field"><label for="login__username"><span class="hidden">Mileage</span></label><input class="form__input" id="password" name="password" placeholder="Password" required="" type="text"></div>
+<div class="form__field"><input type="submit" value="Save"></div>
+</form>
+</div>
+</div>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script>
+        $("#fm_customer_update").submit(function(e){
+            var name = $('#name').val();
+   var gender = $('#gender').val();
+            var dob = $('#dob').val();
+            var mobile = $('#mobile').val();
+            var email = $('#email').val();
+            var address = $('#address').val();
+            var password = $('#password').val();
+            var formURL = $(this).attr("action");
+            var data = {
+name:name,
+gender:gender,
+dob:dob,
+mobile:mobile,
+email:email,
+address:address,
+password:password
+            }
+            $.ajax({   
+url : formURL,
+                    type: "POST",
+                    data : data,
+dataType: 'json',
+                    success: function (data) {
+                                         if(data[0]==1){
+                           alert('Customer Profile Updated'+data[1]);
+                                             $("#fm_customer_update")[0].reset();
+                                         }
+                                         else
+                              alert('Customer Profile Update Failed');
+                                    }
+                });
+e.preventDefault();
+        });
+        function load_data() {
+            var cid = 0;
+            var formURL = 'python/customer_details.py';
+            var data = {
+                            cid:cid
+            }
+            $.ajax({   
+url : formURL,
+                    type: "POST",
+                    data : data,
+dataType: 'json',
+                    success: function (data) {
+                                         if(data!=''){
+document.getElementById('name').value=data[0];
+document.getElementById('gender').value=data[1];
+document.getElementById('dob').value=data[2];
+document.getElementById('mobile').value=data[3];
+document.getElementById('email').value=data[4];
+document.getElementById('address').value=data[5];
+document.getElementById('password').value=data[6];
+                                         }
+                                         else
+                                             alert('Couldn\'t fetch customer profile');
+                                    }
+            });
+e.preventDefault();
+        }
+</script>
+</body>
+</html>
